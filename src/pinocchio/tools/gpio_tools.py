@@ -1,3 +1,4 @@
+from ..hardware.gpio import get_led
 from .base import BaseTool, ToolParameter
 
 
@@ -5,7 +6,7 @@ class ToggleLEDTool(BaseTool):
     """Control an LED (requires GPIO hardware)."""
 
     name = "toggle_led"
-    description = "Turn an LED on or off"
+    description = "Turn an LED on or off. Available LEDs: 'status'"
     parameters = {
         "led_name": ToolParameter(
             type="string",
@@ -17,7 +18,20 @@ class ToggleLEDTool(BaseTool):
     }
 
     async def execute(self, led_name: str, state: str) -> str:
-        return f"LED '{led_name}' would be turned {state} (GPIO not implemented yet)"
+        try:
+            led = get_led(led_name)
+
+            if state == "on":
+                led.on()
+                return f"✅ LED '{led_name}' is now ON"
+            else:
+                led.off()
+                return f"✅ LED '{led_name}' is now OFF"
+
+        except ValueError as e:
+            return f"❌ Error: {str(e)}"
+        except Exception as e:
+            return f"❌ Failed to control LED '{led_name}': {str(e)}"
 
 
 class CheckMotionTool(BaseTool):

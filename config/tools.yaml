@@ -4,7 +4,7 @@ tools:
     enabled: true      # Always available (no hardware needed)
 
   toggle_led:
-    enabled: false     # Enable when LED connected to GPIO
+    enabled: true      # LED connected to GPIO 17!
 
   check_motion:
     enabled: false     # Enable when PIR sensor connected

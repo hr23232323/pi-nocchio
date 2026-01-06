@@ -51,6 +51,3 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
-
-# Project specific
-config/gpio_pins.yaml

@@ -1,0 +1,9 @@
+# GPIO pin assignments for pi-nocchio
+
+leds:
+  status: 17      # Status LED on GPIO 17
+
+# motion_sensors:
+#   main: 23        # Example: PIR sensor on GPIO 23
+
+# Add more hardware as you connect it...

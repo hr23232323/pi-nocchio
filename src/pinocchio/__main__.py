@@ -3,6 +3,7 @@ import logging
 
 from .agent.loop import AgentLoop
 from .config import get_settings
+from .hardware.gpio import cleanup_hardware, init_hardware
 from .utils.colors import print_banner
 from .utils.logger import setup_logging
 
@@ -34,12 +35,19 @@ def main():
 
     logger.info(f"Starting {config.agent_name}...")
 
+    # Initialize GPIO hardware
+    logger.info("Initializing GPIO hardware...")
+    init_hardware()
+
     agent = AgentLoop(config)
 
     try:
         asyncio.run(agent.run())
     except KeyboardInterrupt:
         logger.info("Shutting down Pi-nocchio...")
+    finally:
+        # Clean up GPIO resources
+        cleanup_hardware()
 
 
 if __name__ == "__main__":

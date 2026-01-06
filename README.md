@@ -214,26 +214,42 @@ You: What time is it?
 Pi-nocchio: The current time is 2026-01-05 19:30:45
 ```
 
-### `toggle_led` (disabled by default)
-Control an LED on/off. Requires GPIO hardware to be connected.
+### `toggle_led`
+Control an LED on/off via GPIO. Requires LED connected to a GPIO pin.
+
+```
+You: Turn on the status LED
+   🔧 Using tool: toggle_led(led_name=status, state=on)
+
+Pi-nocchio: ✅ LED 'status' is now ON
+```
+
+Configure your LED in `config/gpio_pins.yaml`:
+```yaml
+leds:
+  status: 17      # GPIO pin number
+```
 
 ### `check_motion` (disabled by default)
 Check motion sensor status. Requires PIR sensor connected via GPIO.
 
 ## Roadmap
 
-### MVP (Current)
-- [x] Text-based CLI interface
+### ✅ MVP (Complete)
+- [x] Text-based CLI interface with colors
 - [x] Simple agent loop with tool calling
 - [x] Tool enable/disable via config
+- [x] Personalized system prompt with configurable personality
+- [x] Configurable logging levels
 - [x] Example tool (GetTimeTool)
 - [x] OpenRouter integration
 
-### Iteration 2: GPIO Tools
-- [ ] Add gpiozero dependency
-- [ ] Implement GPIO abstraction layer
-- [ ] Add functional LED control tool
-- [ ] Add functional PIR motion sensor tool
+### ✅ Iteration 2: GPIO Tools (Complete)
+- [x] Add gpiozero dependency
+- [x] Implement GPIO abstraction layer
+- [x] Add functional LED control tool
+- [x] GPIO pin configuration via YAML
+- [ ] Add functional PIR motion sensor tool (when hardware available)
 
 ### Iteration 3: Voice I/O
 - [ ] Add Vosk (speech-to-text)
