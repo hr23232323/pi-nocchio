@@ -8,6 +8,8 @@ Give an LLM a physical body! Pi-nocchio is an autonomous agent system that runs 
 
 ## Features
 
+- **Personalized AI with Soul** - Give Pi-nocchio a unique personality, name, and purpose
+- **Knows Who It's Assisting** - Configure your name so it can build a relationship with you
 - Text-based LLM agent with tool-calling capabilities
 - Simple custom agent loop (no complex frameworks)
 - Easy tool enable/disable via config
@@ -167,8 +169,24 @@ OPENROUTER_API_KEY=your_api_key_here
 
 # Optional (defaults shown)
 MODEL_NAME=anthropic/claude-3.5-sonnet
+
+# Personalization - Give Pi-nocchio a soul!
+USER_NAME=Friend                    # Your name (Pi-nocchio will know who it's assisting)
+AGENT_NAME=Pi-nocchio               # Pi-nocchio's name (customize if you want)
+AGENT_PERSONALITY=curious and playful  # Personality traits
+
+# App metadata
 APP_URL=https://github.com/hr23232323/pi-nocchio
 ```
+
+**Personalization Example:**
+```bash
+USER_NAME=Harsh
+AGENT_NAME=Woody
+AGENT_PERSONALITY=witty and thoughtful
+```
+
+This gives Pi-nocchio a unique personality and makes interactions more personal!
 
 ## Current Tools
 

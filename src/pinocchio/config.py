@@ -11,6 +11,11 @@ class Settings(BaseSettings):
     model_name: str = "anthropic/claude-3.5-sonnet"
     app_url: str = "https://github.com/hr23232323/pi-nocchio"
 
+    # Personalization
+    user_name: str = "Friend"
+    agent_name: str = "Pi-nocchio"
+    agent_personality: str = "curious and playful"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
