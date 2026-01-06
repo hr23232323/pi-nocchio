@@ -1,0 +1,12 @@
+# Tool configuration - enable/disable tools here
+tools:
+  get_time:
+    enabled: true      # Always available (no hardware needed)
+
+  toggle_led:
+    enabled: false     # Enable when LED connected to GPIO
+
+  check_motion:
+    enabled: false     # Enable when PIR sensor connected
+
+  # Add more tools as you build them...
