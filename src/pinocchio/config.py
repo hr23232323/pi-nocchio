@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     agent_name: str = "Pi-nocchio"
     agent_personality: str = "curious and playful"
 
+    # Logging
+    log_level: str = "INFO"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

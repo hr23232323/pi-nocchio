@@ -3,6 +3,7 @@ import logging
 
 from ..config import Settings
 from ..tools.registry import ToolRegistry
+from ..utils.colors import Colors
 from .llm import LLMClient
 
 logger = logging.getLogger(__name__)
@@ -19,20 +20,24 @@ class AgentLoop:
 
     async def run(self):
         """Main text-based interaction loop."""
-        print("\nPi-nocchio is ready! (Type 'quit' to exit)\n")
+        print(Colors.dim("Type 'quit' to exit") + "\n")
 
         if not self.tool_registry.tools:
-            print("Warning: No tools are enabled. Check config/tools.yaml\n")
+            print(Colors.yellow("⚠️  Warning: No tools are enabled. Check config/tools.yaml\n"))
 
         while True:
             try:
-                user_input = input("You: ").strip()
+                user_input = input(Colors.cyan("You: ")).strip()
 
                 if not user_input:
                     continue
 
                 if user_input.lower() in ["quit", "exit", "bye"]:
-                    print("\nPi-nocchio: Goodbye! I'll keep dreaming of being a real boy!")
+                    print(
+                        "\n"
+                        + Colors.green("🤖 Pi-nocchio: ")
+                        + "Goodbye! I'll keep dreaming of being a real boy!\n"
+                    )
                     break
 
                 self.conversation_history.append({"role": "user", "content": user_input})
@@ -41,14 +46,18 @@ class AgentLoop:
 
                 response_text = await self._agent_reasoning_loop()
 
-                print(f"\nPi-nocchio: {response_text}\n")
+                print(f"\n{Colors.green('🤖 Pi-nocchio:')} {response_text}\n")
 
             except KeyboardInterrupt:
-                print("\n\nPi-nocchio: Goodbye! I'll keep dreaming of being a real boy!")
+                print(
+                    "\n\n"
+                    + Colors.green("🤖 Pi-nocchio: ")
+                    + "Goodbye! I'll keep dreaming of being a real boy!\n"
+                )
                 break
             except Exception as e:
                 logger.error(f"Error in main loop: {e}")
-                print(f"\nError: {e}\n")
+                print(f"\n{Colors.red('Error:')} {e}\n")
 
     async def _agent_reasoning_loop(self) -> str:
         """Inner loop for agent reasoning with tool calls."""
@@ -64,9 +73,9 @@ class AgentLoop:
 
                     arguments = json.loads(tool_call.function.arguments)
 
-                    print(
-                        f"[Using tool: {tool_call.function.name} with args: {arguments}]"
-                    )
+                    # Format arguments nicely
+                    args_str = ", ".join(f"{k}={v}" for k, v in arguments.items()) if arguments else "none"
+                    print(Colors.yellow(f"   🔧 Using tool: {tool_call.function.name}({args_str})"))
 
                     result = await self.tool_registry.execute(
                         tool_call.function.name, arguments

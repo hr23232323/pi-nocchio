@@ -175,6 +175,9 @@ USER_NAME=Friend                    # Your name (Pi-nocchio will know who it's a
 AGENT_NAME=Pi-nocchio               # Pi-nocchio's name (customize if you want)
 AGENT_PERSONALITY=curious and playful  # Personality traits
 
+# Logging
+LOG_LEVEL=INFO                      # Options: DEBUG, INFO, WARNING, ERROR
+
 # App metadata
 APP_URL=https://github.com/hr23232323/pi-nocchio
 ```
@@ -187,6 +190,19 @@ AGENT_PERSONALITY=witty and thoughtful
 ```
 
 This gives Pi-nocchio a unique personality and makes interactions more personal!
+
+### Logging / Debug Mode
+
+Control how verbose the logs are:
+
+```bash
+LOG_LEVEL=INFO    # Clean output, hides HTTP request logs (default)
+LOG_LEVEL=DEBUG   # Shows everything including HTTP requests to OpenRouter
+LOG_LEVEL=WARNING # Only warnings and errors
+LOG_LEVEL=ERROR   # Only errors
+```
+
+By default, noisy third-party logs (httpx, openai) are suppressed at INFO level and above. Set to DEBUG to see all HTTP traffic for troubleshooting.
 
 ## Current Tools
 

@@ -3,22 +3,36 @@ import logging
 
 from .agent.loop import AgentLoop
 from .config import get_settings
+from .utils.colors import print_banner
 from .utils.logger import setup_logging
 
 
 def main():
     """Main entry point for Pi-nocchio."""
-    setup_logging()
-    logger = logging.getLogger(__name__)
-
-    logger.info("Starting Pi-nocchio...")
-
+    # Try to get log level from config, fall back to INFO if config fails
     try:
         config = get_settings()
-    except Exception as e:
-        print(f"\nError loading configuration: {e}")
-        print("Make sure you have a .env file with OPENROUTER_API_KEY set.\n")
-        return
+        log_level = config.log_level
+    except Exception:
+        log_level = "INFO"
+        config = None
+
+    setup_logging(log_level)
+    logger = logging.getLogger(__name__)
+
+    # If config loading failed earlier, try again and handle error
+    if config is None:
+        try:
+            config = get_settings()
+        except Exception as e:
+            print(f"\nError loading configuration: {e}")
+            print("Make sure you have a .env file with OPENROUTER_API_KEY set.\n")
+            return
+
+    # Print welcome banner
+    print_banner(config.agent_name)
+
+    logger.info(f"Starting {config.agent_name}...")
 
     agent = AgentLoop(config)
 
