@@ -69,7 +69,7 @@ class AgentLoop:
 
             if response.tool_calls:
                 for tool_call in response.tool_calls:
-                    logger.info(f"Tool call: {tool_call.function.name}")
+                    logger.debug(f"Tool call: {tool_call.function.name}")
 
                     arguments = json.loads(tool_call.function.arguments)
 
@@ -81,7 +81,7 @@ class AgentLoop:
                         tool_call.function.name, arguments
                     )
 
-                    logger.info(f"Tool result: {result}")
+                    logger.debug(f"Tool result: {result}")
 
                     self.conversation_history.append(
                         {
