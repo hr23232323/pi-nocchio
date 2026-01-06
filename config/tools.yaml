@@ -3,6 +3,9 @@ tools:
   get_time:
     enabled: true      # Always available (no hardware needed)
 
+  wait:
+    enabled: true      # Let the agent create delays for patterns!
+
   toggle_led:
     enabled: true      # LED connected to GPIO 17!
 

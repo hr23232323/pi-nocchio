@@ -214,6 +214,21 @@ You: What time is it?
 Pi-nocchio: The current time is 2026-01-05 19:30:45
 ```
 
+### `wait`
+Pause/sleep for a specified duration. The LLM can use this to create patterns and timing!
+
+```
+You: Blink the LED 3 times
+   🔧 Using tool: toggle_led(led_name=status, state=on)
+   🔧 Using tool: wait(seconds=0.5)
+   🔧 Using tool: toggle_led(led_name=status, state=off)
+   ... (repeats)
+
+Pi-nocchio: Done! I blinked the status LED 3 times.
+```
+
+The LLM will creatively combine `wait` with other tools to create patterns, morse code, pulses, and more!
+
 ### `toggle_led`
 Control an LED on/off via GPIO. Requires LED connected to a GPIO pin.
 
