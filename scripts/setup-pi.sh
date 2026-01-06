@@ -23,7 +23,10 @@ sudo apt install -y \
     git \
     curl \
     python3-pip \
-    python3-venv
+    python3-venv \
+    swig \
+    python3-dev \
+    build-essential
 
 # Install uv if not already installed
 if ! command -v uv &> /dev/null; then

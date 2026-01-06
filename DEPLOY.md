@@ -73,22 +73,25 @@ If you want to do it manually instead of using the setup script:
 # 1. Update system
 sudo apt update && sudo apt upgrade -y
 
-# 2. Install uv
+# 2. Install build dependencies (needed for GPIO libraries)
+sudo apt install -y git curl python3-pip python3-venv swig python3-dev build-essential
+
+# 3. Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source $HOME/.cargo/env
 
-# 3. Clone repo
+# 4. Clone repo
 git clone https://github.com/hr23232323/pi-nocchio.git
 cd pi-nocchio
 
-# 4. Install dependencies
+# 5. Install dependencies
 uv sync
 
-# 5. Configure
+# 6. Configure
 cp .env.example .env
 nano .env  # Add your API key
 
-# 6. Run
+# 7. Run
 uv run python -m pinocchio
 ```
 
