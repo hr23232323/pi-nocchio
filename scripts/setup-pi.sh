@@ -26,7 +26,8 @@ sudo apt install -y \
     python3-venv \
     swig \
     python3-dev \
-    build-essential
+    build-essential \
+    liblgpio-dev
 
 # Install uv if not already installed
 if ! command -v uv &> /dev/null; then

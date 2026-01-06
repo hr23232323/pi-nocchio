@@ -74,7 +74,7 @@ If you want to do it manually instead of using the setup script:
 sudo apt update && sudo apt upgrade -y
 
 # 2. Install build dependencies (needed for GPIO libraries)
-sudo apt install -y git curl python3-pip python3-venv swig python3-dev build-essential
+sudo apt install -y git curl python3-pip python3-venv swig python3-dev build-essential liblgpio-dev
 
 # 3. Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
