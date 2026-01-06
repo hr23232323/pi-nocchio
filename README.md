@@ -4,6 +4,8 @@
 
 Give an LLM a physical body! Pi-nocchio is an autonomous agent system that runs on a Raspberry Pi, enabling LLMs to interact with the real world through sensors and actuators.
 
+**🚀 [Deploy to Raspberry Pi →](DEPLOY.md)**
+
 ## Features
 
 - Text-based LLM agent with tool-calling capabilities
