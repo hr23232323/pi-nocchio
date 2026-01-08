@@ -369,8 +369,33 @@ uv sync  # Installs piper-tts
 # Download voice model manually if needed
 mkdir -p ~/.local/share/piper/voices
 cd ~/.local/share/piper/voices
-wget https://github.com/rhasspy/piper/releases/download/v1.2.0/en_US-lessac-medium.onnx
-wget https://github.com/rhasspy/piper/releases/download/v1.2.0/en_US-lessac-medium.onnx.json
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+```
+
+### "audio open error" when using speak tool with GPIO speaker
+
+If you have a GPIO speaker module (not 3.5mm/HDMI), you need to enable PWM audio:
+
+```bash
+cd ~/pi-nocchio
+chmod +x scripts/enable-pwm-audio.sh
+./scripts/enable-pwm-audio.sh
+```
+
+This will:
+1. Add PWM audio configuration to `/boot/firmware/config.txt`
+2. Reboot the Pi
+3. After reboot, select PWM audio output:
+   ```bash
+   sudo raspi-config
+   # System Options → Audio → Select "bcm2835 Headphones"
+   # OR run: amixer cset numid=3 1
+   ```
+
+Test audio with:
+```bash
+speaker-test -t wav -c 2
 ```
 
 ### Dependencies not installing
