@@ -64,17 +64,18 @@ echo "🎤 Setting up Piper TTS voice model..."
 VOICE_NAME="en_US-lessac-medium"
 VOICE_DIR="$HOME/.local/share/piper/voices"
 VOICE_FILE="$VOICE_DIR/$VOICE_NAME.onnx"
+VOICE_CONFIG="$VOICE_DIR/$VOICE_NAME.onnx.json"
 
-if [ ! -f "$VOICE_FILE" ]; then
-    echo "📥 Downloading Piper voice model ($VOICE_NAME)..."
+if [ ! -f "$VOICE_FILE" ] || [ ! -f "$VOICE_CONFIG" ]; then
+    echo "📥 Downloading Piper voice model ($VOICE_NAME) from Hugging Face..."
     mkdir -p "$VOICE_DIR"
 
-    # Download voice model and config from Piper releases
-    VOICE_URL="https://github.com/rhasspy/piper/releases/download/v1.2.0/${VOICE_NAME}.onnx"
-    CONFIG_URL="https://github.com/rhasspy/piper/releases/download/v1.2.0/${VOICE_NAME}.onnx.json"
+    # Download voice model files from Hugging Face
+    MODEL_URL="https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx"
+    CONFIG_URL="https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json"
 
-    wget -q --show-progress -O "$VOICE_FILE" "$VOICE_URL"
-    wget -q --show-progress -O "$VOICE_FILE.json" "$CONFIG_URL"
+    wget -q --show-progress -O "$VOICE_FILE" "$MODEL_URL"
+    wget -q --show-progress -O "$VOICE_CONFIG" "$CONFIG_URL"
 
     echo "✓ Voice model downloaded to $VOICE_DIR"
 else
