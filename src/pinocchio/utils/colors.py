@@ -43,6 +43,11 @@ class Colors:
         return f"{Colors.BLUE}{text}{Colors.RESET}"
 
     @staticmethod
+    def red(text: str) -> str:
+        """Return text in red."""
+        return f"{Colors.RED}{text}{Colors.RESET}"
+
+    @staticmethod
     def bold(text: str) -> str:
         """Return text in bold."""
         return f"{Colors.BOLD}{text}{Colors.RESET}"

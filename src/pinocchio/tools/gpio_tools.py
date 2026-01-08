@@ -294,6 +294,7 @@ class PlayMelodyTool(BaseTool):
         "notes": ToolParameter(
             type="array",
             description="Array of note names like ['C4', 'E4', 'G4'] or ['C4', 'REST', 'E4']",
+            items={"type": "string"},
         ),
         "note_duration": ToolParameter(
             type="number",

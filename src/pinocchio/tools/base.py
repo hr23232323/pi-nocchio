@@ -5,10 +5,17 @@ from typing import Any
 class ToolParameter:
     """Definition for a tool parameter."""
 
-    def __init__(self, type: str, description: str, enum: list[str] | None = None):
+    def __init__(
+        self,
+        type: str,
+        description: str,
+        enum: list[str] | None = None,
+        items: dict | None = None,
+    ):
         self.type = type
         self.description = description
         self.enum = enum
+        self.items = items  # For array types
 
 
 class BaseTool(ABC):
@@ -33,6 +40,8 @@ class BaseTool(ABC):
             }
             if param.enum:
                 prop["enum"] = param.enum
+            if param.items:
+                prop["items"] = param.items
             properties[param_name] = prop
 
         return {
