@@ -47,6 +47,15 @@ def init_hardware():
         except Exception as e:
             logger.error(f"Failed to initialize LED '{name}' on GPIO {pin}: {e}")
 
+    # Initialize emotion LEDs (individual colored LEDs for emotional expression)
+    emotion_leds = config.get("emotion_leds", {})
+    for emotion, pin in emotion_leds.items():
+        try:
+            _hardware_registry[f"emotion_{emotion}"] = LED(pin)
+            logger.info(f"Initialized emotion LED '{emotion}' on GPIO {pin}")
+        except Exception as e:
+            logger.error(f"Failed to initialize emotion LED '{emotion}' on GPIO {pin}: {e}")
+
     # Initialize motion sensors
     motion_sensors = config.get("motion_sensors", {})
     for name, pin in motion_sensors.items():
@@ -65,6 +74,16 @@ def get_led(name: str) -> LED:
     if key not in _hardware_registry:
         raise ValueError(
             f"LED '{name}' not found. Check config/gpio_pins.yaml and ensure hardware is initialized."
+        )
+    return _hardware_registry[key]
+
+
+def get_emotion_led(emotion: str) -> LED:
+    """Get emotion LED by emotion name."""
+    key = f"emotion_{emotion}"
+    if key not in _hardware_registry:
+        raise ValueError(
+            f"Emotion LED '{emotion}' not found. Check config/gpio_pins.yaml and ensure hardware is initialized."
         )
     return _hardware_registry[key]
 

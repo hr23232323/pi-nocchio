@@ -7,7 +7,16 @@ tools:
     enabled: true      # Let the agent create delays for patterns!
 
   toggle_led:
-    enabled: true      # LED connected to GPIO 17!
+    enabled: false      # LED connected to GPIO 17!
+
+  express_emotion:
+    enabled: true      # Show emotions with colored LEDs (red, green, yellow)
+
+  pulse_emotion:
+    enabled: true      # Pulse emotion LEDs with breathing effect
+
+  blink_emotion:
+    enabled: true      # Blink emotion LEDs for bursts of feeling
 
   check_motion:
     enabled: false     # Enable when PIR sensor connected

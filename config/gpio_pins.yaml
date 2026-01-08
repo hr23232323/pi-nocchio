@@ -1,7 +1,13 @@
 # GPIO pin assignments for pi-nocchio
 
 leds:
-  status: 17      # Status LED on GPIO 17
+  # status: 17      # Status LED on GPIO 17
+
+# Emotion expression LEDs - individual colored LEDs for showing feelings
+emotion_leds:
+  excited: 27     # Red LED - excitement, alerts, energy
+  happy: 4       # Green LED - happiness, success, calm
+  curious: 17     # Yellow LED - thinking, curious, processing
 
 # motion_sensors:
 #   main: 23        # Example: PIR sensor on GPIO 23
