@@ -17,6 +17,7 @@ dependencies = [
     "pyyaml>=6.0.0",           # Parse config files
     "gpiozero>=2.0.0",         # GPIO control (Raspberry Pi)
     "lgpio>=0.2.0",            # GPIO backend for gpiozero
+    "piper-tts>=1.2.0",        # Local neural text-to-speech
 ]
 
 [project.optional-dependencies]

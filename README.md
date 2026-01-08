@@ -245,6 +245,70 @@ leds:
   status: 17      # GPIO pin number
 ```
 
+### Emotion Expression Tools
+
+**`express_emotion`** - Show emotions with colored LEDs
+```
+You: I'm excited to show you something!
+   🔧 Using tool: express_emotion(emotion=excited)
+
+Pi-nocchio: 🔴 Feeling excited! Red LED is glowing with energy!
+```
+
+Available emotions:
+- `excited` (red LED) - Excitement, alerts, high energy
+- `happy` (green LED) - Happiness, success, calm
+- `curious` (yellow LED) - Thinking, wondering, processing
+- `neutral` - All LEDs off
+
+**`pulse_emotion`** - Breathing effect to show intensity of feeling
+
+**`blink_emotion`** - Rapid blinks for bursts of emotion
+
+### Audio Tools
+
+**`play_tone`** - Play tones at specific frequencies through speaker
+```
+You: Play a 440 Hz tone
+   🔧 Using tool: play_tone(frequency=440, duration=1.0)
+
+Pi-nocchio: 🔊 Played 440 Hz tone for 1.0s
+```
+
+**`play_melody`** - Play musical melodies using note names
+```
+You: Play C E G C
+   🔧 Using tool: play_melody(notes=['C4', 'E4', 'G4', 'C5'])
+
+Pi-nocchio: 🎵 Played melody: C4, E4, G4, C5
+```
+
+**`beep_pattern`** - Custom beep patterns for alerts
+```
+You: Beep three times quickly
+   🔧 Using tool: beep_pattern(pattern='short-short-short')
+
+Pi-nocchio: 🔔 Played pattern: short-short-short
+```
+
+**`speak`** - Text-to-speech using Piper (local, offline, free!)
+```
+You: Say hello to me
+   🔧 Using tool: speak(text='Hello! I'm Pi-nocchio, happy to meet you!')
+
+Pi-nocchio: 🗣️ Spoke: "Hello! I'm Pi-nocchio, happy to meet you!"
+```
+
+Uses Piper - a fast neural TTS engine that runs locally on the Pi:
+- ✅ **100% free** - no API costs
+- ✅ **Offline** - works without internet
+- ✅ **Fast** - optimized for Raspberry Pi
+- ✅ **Natural voices** - high-quality neural TTS
+
+Voice model is auto-downloaded by setup script!
+
+Want a different voice? Download more from [Piper releases](https://github.com/rhasspy/piper/releases) and update `PIPER_VOICE` in `.env`
+
 ### `check_motion` (disabled by default)
 Check motion sensor status. Requires PIR sensor connected via GPIO.
 
@@ -263,14 +327,16 @@ Check motion sensor status. Requires PIR sensor connected via GPIO.
 - [x] Add gpiozero dependency
 - [x] Implement GPIO abstraction layer
 - [x] Add functional LED control tool
+- [x] Emotion expression LEDs (red, green, yellow)
+- [x] Speaker/audio output tools (tones, melodies, beep patterns)
 - [x] GPIO pin configuration via YAML
 - [ ] Add functional PIR motion sensor tool (when hardware available)
 
-### Iteration 3: Voice I/O
-- [ ] Add Vosk (speech-to-text)
-- [ ] Add Piper (text-to-speech)
+### ✅ Iteration 3: Voice I/O (In Progress)
+- [x] Text-to-speech using Piper (local, offline, free!)
+- [ ] Speech-to-text (future: Vosk or Whisper for offline)
 - [ ] Update agent loop for voice interaction
-- [ ] Create setup script for model downloads
+- [ ] Wake word detection
 
 ### Iteration 4: Vision
 - [ ] Add picamera2 support
@@ -290,6 +356,22 @@ Make sure you have a `.env` file with your `OPENROUTER_API_KEY` set.
 
 ### "No tools are enabled"
 Check `config/tools.yaml` and ensure at least one tool has `enabled: true`.
+
+### "Piper not installed" or "Voice model not found" (for text-to-speech)
+Re-run the setup script to install Piper and download voice models:
+```bash
+./scripts/setup-pi.sh
+```
+
+Or manually install:
+```bash
+uv sync  # Installs piper-tts
+# Download voice model manually if needed
+mkdir -p ~/.local/share/piper/voices
+cd ~/.local/share/piper/voices
+wget https://github.com/rhasspy/piper/releases/download/v1.2.0/en_US-lessac-medium.onnx
+wget https://github.com/rhasspy/piper/releases/download/v1.2.0/en_US-lessac-medium.onnx.json
+```
 
 ### Dependencies not installing
 Make sure you have `uv` installed:

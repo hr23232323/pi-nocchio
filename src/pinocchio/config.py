@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     model_name: str = "anthropic/claude-3.5-sonnet"
     app_url: str = "https://github.com/hr23232323/pi-nocchio"
 
+    # Piper TTS (local text-to-speech)
+    piper_voice: str = "en_US-lessac-medium"  # Default voice model
+    piper_model_path: str = "~/.local/share/piper/voices"  # Where voice models are stored
+
     # Personalization
     user_name: str = "Friend"
     agent_name: str = "Pi-nocchio"

@@ -4,12 +4,12 @@ import logging
 from pathlib import Path
 
 import yaml
-from gpiozero import LED, MotionSensor
+from gpiozero import LED, MotionSensor, TonalBuzzer
 
 logger = logging.getLogger(__name__)
 
 # Global registry of hardware components
-_hardware_registry: dict[str, LED | MotionSensor] = {}
+_hardware_registry: dict[str, LED | MotionSensor | TonalBuzzer] = {}
 _initialized = False
 
 
@@ -56,6 +56,15 @@ def init_hardware():
         except Exception as e:
             logger.error(f"Failed to initialize emotion LED '{emotion}' on GPIO {pin}: {e}")
 
+    # Initialize speakers (speaker modules with amplifiers for tones/melodies)
+    buzzers = config.get("buzzers", {})
+    for name, pin in buzzers.items():
+        try:
+            _hardware_registry[f"buzzer_{name}"] = TonalBuzzer(pin)
+            logger.info(f"Initialized speaker '{name}' on GPIO {pin}")
+        except Exception as e:
+            logger.error(f"Failed to initialize speaker '{name}' on GPIO {pin}: {e}")
+
     # Initialize motion sensors
     motion_sensors = config.get("motion_sensors", {})
     for name, pin in motion_sensors.items():
@@ -84,6 +93,16 @@ def get_emotion_led(emotion: str) -> LED:
     if key not in _hardware_registry:
         raise ValueError(
             f"Emotion LED '{emotion}' not found. Check config/gpio_pins.yaml and ensure hardware is initialized."
+        )
+    return _hardware_registry[key]
+
+
+def get_buzzer(name: str) -> TonalBuzzer:
+    """Get buzzer by name."""
+    key = f"buzzer_{name}"
+    if key not in _hardware_registry:
+        raise ValueError(
+            f"Buzzer '{name}' not found. Check config/gpio_pins.yaml and ensure hardware is initialized."
         )
     return _hardware_registry[key]
 

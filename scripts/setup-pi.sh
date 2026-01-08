@@ -27,7 +27,9 @@ sudo apt install -y \
     swig \
     python3-dev \
     build-essential \
-    liblgpio-dev
+    liblgpio-dev \
+    wget \
+    unzip
 
 # Install uv if not already installed
 if ! command -v uv &> /dev/null; then
@@ -56,6 +58,28 @@ fi
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
 uv sync
+
+# Download Piper voice model
+echo "🎤 Setting up Piper TTS voice model..."
+VOICE_NAME="en_US-lessac-medium"
+VOICE_DIR="$HOME/.local/share/piper/voices"
+VOICE_FILE="$VOICE_DIR/$VOICE_NAME.onnx"
+
+if [ ! -f "$VOICE_FILE" ]; then
+    echo "📥 Downloading Piper voice model ($VOICE_NAME)..."
+    mkdir -p "$VOICE_DIR"
+
+    # Download voice model and config from Piper releases
+    VOICE_URL="https://github.com/rhasspy/piper/releases/download/v1.2.0/${VOICE_NAME}.onnx"
+    CONFIG_URL="https://github.com/rhasspy/piper/releases/download/v1.2.0/${VOICE_NAME}.onnx.json"
+
+    wget -q --show-progress -O "$VOICE_FILE" "$VOICE_URL"
+    wget -q --show-progress -O "$VOICE_FILE.json" "$CONFIG_URL"
+
+    echo "✓ Voice model downloaded to $VOICE_DIR"
+else
+    echo "✓ Piper voice model already exists"
+fi
 
 # Create .env file if it doesn't exist
 if [ ! -f .env ]; then

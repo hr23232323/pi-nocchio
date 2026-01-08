@@ -16,12 +16,12 @@ class ToolRegistry:
 
     def _discover_tools(self):
         """Auto-discover and register all tool classes."""
-        from . import gpio_tools, utility_tools
+        from . import gpio_tools, utility_tools, voice_tools
 
         tools_config = get_tools_config()
         enabled_tools = tools_config.get("tools", {})
 
-        modules = [utility_tools, gpio_tools]
+        modules = [utility_tools, gpio_tools, voice_tools]
 
         for module in modules:
             for name in dir(module):

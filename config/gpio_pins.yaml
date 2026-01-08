@@ -9,6 +9,10 @@ emotion_leds:
   happy: 17       # Green LED - happiness, success, calm
   curious: 27     # Yellow LED - thinking, curious, processing
 
+# Speakers - speaker module with amplifier for tones, melodies, and sound effects
+buzzers:
+  main: 18        # Speaker with amplifier module on GPIO 18 (PWM-capable)
+
 # motion_sensors:
 #   main: 23        # Example: PIR sensor on GPIO 23
 

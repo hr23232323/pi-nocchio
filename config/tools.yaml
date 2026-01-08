@@ -18,6 +18,18 @@ tools:
   blink_emotion:
     enabled: true      # Blink emotion LEDs for bursts of feeling
 
+  play_tone:
+    enabled: true      # Play tones through speaker at specific frequencies
+
+  play_melody:
+    enabled: true      # Play melodies through speaker using musical notes
+
+  beep_pattern:
+    enabled: true      # Create custom beep patterns through speaker for alerts
+
+  speak:
+    enabled: true      # Text-to-speech using OpenAI API - Pi-nocchio can talk!
+
   check_motion:
     enabled: false     # Enable when PIR sensor connected
 

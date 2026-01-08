@@ -1,7 +1,25 @@
 import asyncio
 
-from ..hardware.gpio import get_emotion_led, get_led
+from ..hardware.gpio import get_buzzer, get_emotion_led, get_led
 from .base import BaseTool, ToolParameter
+
+# Musical note frequencies (in Hz) for melodies
+NOTES = {
+    "C4": 261.63,
+    "D4": 293.66,
+    "E4": 329.63,
+    "F4": 349.23,
+    "G4": 392.00,
+    "A4": 440.00,
+    "B4": 493.88,
+    "C5": 523.25,
+    "D5": 587.33,
+    "E5": 659.25,
+    "F5": 698.46,
+    "G5": 783.99,
+    "A5": 880.00,
+    "REST": 0,  # Silence/rest
+}
 
 
 class ToggleLEDTool(BaseTool):
@@ -221,3 +239,155 @@ class BlinkEmotionTool(BaseTool):
             return f"❌ Error: {str(e)}"
         except Exception as e:
             return f"❌ Failed to blink emotion '{emotion}': {str(e)}"
+
+
+class PlayToneTool(BaseTool):
+    """Play a tone at a specific frequency through the speaker."""
+
+    name = "play_tone"
+    description = (
+        "Play a tone/sound at a specific frequency through the speaker for a duration. "
+        "Lower frequencies (200-400 Hz) = deep sounds. "
+        "Mid frequencies (400-800 Hz) = normal tones. "
+        "Higher frequencies (800-2000 Hz) = high-pitched beeps. "
+        "Use this for alerts, notifications, or simple sounds!"
+    )
+    parameters = {
+        "frequency": ToolParameter(
+            type="number",
+            description="Frequency in Hz (200-2000). Example: 440 = musical note A4",
+        ),
+        "duration": ToolParameter(
+            type="number",
+            description="Duration in seconds (default: 0.5)",
+        ),
+    }
+
+    async def execute(self, frequency: float, duration: float = 0.5) -> str:
+        try:
+            buzzer = get_buzzer("main")
+
+            # Play the tone
+            buzzer.play(frequency)
+            await asyncio.sleep(duration)
+            buzzer.stop()
+
+            return f"🔊 Played {frequency} Hz tone for {duration}s"
+
+        except ValueError as e:
+            return f"❌ Error: {str(e)}"
+        except Exception as e:
+            return f"❌ Failed to play tone: {str(e)}"
+
+
+class PlayMelodyTool(BaseTool):
+    """Play a simple melody using musical notes."""
+
+    name = "play_melody"
+    description = (
+        "Play a melody using musical notes! Each note is a string like 'C4', 'E4', 'G5'. "
+        "Available notes: C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, REST (silence). "
+        "Example: ['C4', 'E4', 'G4', 'C5'] plays a C major chord ascending. "
+        "Use 'REST' for pauses in the melody. Great for alerts, celebrations, or musical expression!"
+    )
+    parameters = {
+        "notes": ToolParameter(
+            type="array",
+            description="Array of note names like ['C4', 'E4', 'G4'] or ['C4', 'REST', 'E4']",
+        ),
+        "note_duration": ToolParameter(
+            type="number",
+            description="Duration of each note in seconds (default: 0.3)",
+        ),
+    }
+
+    async def execute(self, notes: list[str], note_duration: float = 0.3) -> str:
+        try:
+            buzzer = get_buzzer("main")
+
+            played_notes = []
+            for note in notes:
+                note_upper = note.upper()
+
+                if note_upper not in NOTES:
+                    return f"❌ Unknown note '{note}'. Available: C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, REST"
+
+                freq = NOTES[note_upper]
+
+                if freq == 0:  # REST
+                    buzzer.stop()
+                else:
+                    buzzer.play(freq)
+
+                await asyncio.sleep(note_duration)
+                played_notes.append(note_upper)
+
+            buzzer.stop()
+
+            note_list = ", ".join(played_notes)
+            return f"🎵 Played melody: {note_list}"
+
+        except ValueError as e:
+            return f"❌ Error: {str(e)}"
+        except Exception as e:
+            return f"❌ Failed to play melody: {str(e)}"
+
+
+class BeepPatternTool(BaseTool):
+    """Create custom beep patterns for alerts and notifications."""
+
+    name = "beep_pattern"
+    description = (
+        "Create a custom beep pattern using short/long beeps and pauses. "
+        "Pattern examples: "
+        "'short-short-long' = two quick beeps + one long beep (like morse code S-O-S), "
+        "'long-pause-long' = alert pattern, "
+        "'short-short-short' = triple beep notification. "
+        "Use for: alerts, confirmations, alarms, attention-getting, morse code!"
+    )
+    parameters = {
+        "pattern": ToolParameter(
+            type="string",
+            description="Pattern string like 'short-short-long' or 'long-pause-short-pause-short'",
+        ),
+        "frequency": ToolParameter(
+            type="number",
+            description="Beep frequency in Hz (default: 800)",
+        ),
+    }
+
+    async def execute(self, pattern: str, frequency: float = 800) -> str:
+        try:
+            buzzer = get_buzzer("main")
+
+            # Define timing for pattern elements
+            timings = {
+                "short": 0.15,  # Short beep
+                "long": 0.5,  # Long beep
+                "pause": 0.3,  # Pause/silence
+            }
+
+            parts = pattern.lower().split("-")
+
+            for part in parts:
+                part = part.strip()
+
+                if part == "pause":
+                    buzzer.stop()
+                    await asyncio.sleep(timings["pause"])
+                elif part in ["short", "long"]:
+                    buzzer.play(frequency)
+                    await asyncio.sleep(timings[part])
+                    buzzer.stop()
+                    await asyncio.sleep(0.1)  # Small gap between beeps
+                else:
+                    return f"❌ Unknown pattern element '{part}'. Use: short, long, pause"
+
+            buzzer.stop()
+
+            return f"🔔 Played pattern: {pattern}"
+
+        except ValueError as e:
+            return f"❌ Error: {str(e)}"
+        except Exception as e:
+            return f"❌ Failed to play beep pattern: {str(e)}"
