@@ -39,7 +39,8 @@ def main():
     logger.info("Initializing GPIO hardware...")
     init_hardware()
 
-    agent = AgentLoop(config)
+    # Enable voice mode by default
+    agent = AgentLoop(config, voice_mode=True)
 
     try:
         asyncio.run(agent.run())

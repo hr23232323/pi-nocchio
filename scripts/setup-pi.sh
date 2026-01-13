@@ -29,7 +29,8 @@ sudo apt install -y \
     build-essential \
     liblgpio-dev \
     wget \
-    unzip
+    unzip \
+    portaudio19-dev
 
 # Install uv if not already installed
 if ! command -v uv &> /dev/null; then
@@ -80,6 +81,29 @@ if [ ! -f "$VOICE_FILE" ] || [ ! -f "$VOICE_CONFIG" ]; then
     echo "✓ Voice model downloaded to $VOICE_DIR"
 else
     echo "✓ Piper voice model already exists"
+fi
+
+# Download Vosk speech recognition model
+echo "🎤 Setting up Vosk STT model..."
+VOSK_MODEL_NAME="vosk-model-small-en-us-0.15"
+VOSK_DIR="$HOME/.local/share/vosk/models"
+VOSK_MODEL_DIR="$VOSK_DIR/$VOSK_MODEL_NAME"
+
+if [ ! -d "$VOSK_MODEL_DIR" ]; then
+    echo "📥 Downloading Vosk model ($VOSK_MODEL_NAME) from alphacephei.com..."
+    mkdir -p "$VOSK_DIR"
+
+    # Download and extract Vosk model
+    VOSK_URL="https://alphacephei.com/vosk/models/$VOSK_MODEL_NAME.zip"
+    TEMP_ZIP="/tmp/$VOSK_MODEL_NAME.zip"
+
+    wget -q --show-progress -O "$TEMP_ZIP" "$VOSK_URL"
+    unzip -q "$TEMP_ZIP" -d "$VOSK_DIR"
+    rm "$TEMP_ZIP"
+
+    echo "✓ Vosk model downloaded and extracted to $VOSK_MODEL_DIR"
+else
+    echo "✓ Vosk model already exists"
 fi
 
 # Create .env file if it doesn't exist

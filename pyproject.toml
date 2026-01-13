@@ -18,6 +18,8 @@ dependencies = [
     "gpiozero>=2.0.0",         # GPIO control (Raspberry Pi)
     "lgpio>=0.2.0",            # GPIO backend for gpiozero
     "piper-tts>=1.2.0",        # Local neural text-to-speech
+    "vosk>=0.3.45",            # Offline speech recognition
+    "pyaudio>=0.2.13",         # Audio capture from microphone
 ]
 
 [project.optional-dependencies]

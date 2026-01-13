@@ -12,33 +12,57 @@ logger = logging.getLogger(__name__)
 class AgentLoop:
     """Main autonomous agent control loop."""
 
-    def __init__(self, config: Settings):
+    def __init__(self, config: Settings, voice_mode: bool = False):
         self.llm = LLMClient(config)
         self.tool_registry = ToolRegistry()
         self.conversation_history: list[dict] = []
         self.max_history = 20
+        self.voice_mode = voice_mode
+        self.voice_listener = None
+
+        if self.voice_mode:
+            from ..voice import VoiceListener
+
+            self.voice_listener = VoiceListener(wake_word="pinocchio")
 
     async def run(self):
-        """Main text-based interaction loop."""
-        print(Colors.dim("Type 'quit' to exit") + "\n")
+        """Main interaction loop (text or voice)."""
+        if self.voice_mode:
+            print(Colors.magenta("\n🎤 Voice Mode Enabled"))
+            print(Colors.dim("Say 'Pi-nocchio' followed by your request"))
+            print(Colors.dim("Press Ctrl+C to exit") + "\n")
+        else:
+            print(Colors.dim("Type 'quit' to exit") + "\n")
 
         if not self.tool_registry.tools:
             print(Colors.yellow("⚠️  Warning: No tools are enabled. Check config/tools.yaml\n"))
 
         while True:
             try:
-                user_input = input(Colors.cyan("You: ")).strip()
+                # Get user input (text or voice)
+                if self.voice_mode:
+                    user_input = self.voice_listener.listen_once()
 
-                if not user_input:
-                    continue
+                    if user_input is None:
+                        # User interrupted (Ctrl+C)
+                        break
 
-                if user_input.lower() in ["quit", "exit", "bye"]:
-                    print(
-                        "\n"
-                        + Colors.green("🤖 Pi-nocchio: ")
-                        + "Goodbye! I'll keep dreaming of being a real boy!\n"
-                    )
-                    break
+                    if not user_input:
+                        # No speech captured, continue listening
+                        continue
+                else:
+                    user_input = input(Colors.cyan("You: ")).strip()
+
+                    if not user_input:
+                        continue
+
+                    if user_input.lower() in ["quit", "exit", "bye"]:
+                        print(
+                            "\n"
+                            + Colors.green("🤖 Pi-nocchio: ")
+                            + "Goodbye! I'll keep dreaming of being a real boy!\n"
+                        )
+                        break
 
                 self.conversation_history.append({"role": "user", "content": user_input})
 

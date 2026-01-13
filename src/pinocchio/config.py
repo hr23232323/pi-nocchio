@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     piper_voice: str = "en_US-lessac-medium"  # Default voice model
     piper_model_path: str = "~/.local/share/piper/voices"  # Where voice models are stored
 
+    # Vosk STT (local speech-to-text)
+    vosk_model_path: str = "~/.local/share/vosk/models/vosk-model-small-en-us-0.15"  # Vosk model location
+
     # Personalization
     user_name: str = "Friend"
     agent_name: str = "Pi-nocchio"
